@@ -1,139 +1,51 @@
-#include "header.h"
+#include "shell.h"
 
 /**
 
- * _get_env- gets the current env
+ * _getenv - gets env of input
 
- * @env: the env
+ * @env: input
 
- * Return: _env_parser function on success, NULL on failure
+ * Return: env without =
 
- **/
+ */
 
-char **_get_env(char *env)
+char *_getenv(char *env)
   
 {
   
-  int inner;
+  int i = 0, n = 0;
   
-  int outer;
-  
-  char *name = NULL;
+  char *temp, *res;
   
 
   
-  for (outer = 0; environ[outer] != NULL; outer++)
+  while (environ[i] != NULL)
     
     {
       
-      for (inner = 0; environ[outer][inner] != '='; inner++)
+      if (_strcmp(environ[i], env) == 0)
 	
-	{
-	  
-	  if (environ[outer][inner] != env[inner])
-	    
-	    break;
-	  
-	  if (environ[outer][inner] == env[inner])
-	    
-	    {
-	      
-	      if (env[inner + 1] == '\0' && environ[outer][inner + 1] == '=')
-		
-		{
-		  
-		  name = _strdup(&(environ[outer][inner + 2]));
-		  
-		  return (_env_parser(name));
-		  
-		}
-	      
-	    }
-	  
-	}
+	temp = environ[i];
+      
+      i++;
       
     }
   
-  return (NULL);
-  
-}
-
-
-
-/**
-
- * _env_parser- tokenizes the PATH
-
- * @name: the full PATH seperated by :'s
-
- * Return: an array of strings
-
- **/
-
-
-
-char **_env_parser(char *name)
-  
-{
-  
-  int token_inc;
-  
-  int tokencount;
-  
-  char *tokenize = NULL;
-  
-  int i;
-  
-  char **p = NULL;
-  
-  char *namestore = name;
-  
 
   
-  tokencount = 0;
-  
-  for (i = 0; name[i] != '\0'; i++)
+  while (temp[n] != '\0')
     
     {
       
-      if (name[i] == ':')
+      if (_strcmp(temp, env) == 0)
 	
-	{
-	  
-	  tokencount++;
-	  
-	}
+	res = _strstr(temp, "/");
+      
+      n++;
       
     }
   
-  p = malloc(sizeof(char *) * (tokencount + 2));
-  
-  if (p != NULL)
-    
-    {
-      
-      token_inc = 0;
-      
-      tokenize = strtok(name, ":");
-      
-      while (token_inc < (tokencount + 1))
-	
-	{
-	  
-	  p[token_inc] = _strdup(tokenize);
-	  
-	  tokenize = strtok(NULL, ":");
-	  
-	  token_inc++;
-	  
-	}
-      
-      p[token_inc] = NULL;
-      
-    }
-  
-  free(namestore);
-  
-  return (p);
+  return (res);
   
 }
